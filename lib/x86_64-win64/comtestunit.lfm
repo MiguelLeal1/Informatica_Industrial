@@ -1,0 +1,248 @@
+object FormComTest: TFormComTest
+  Left = 552
+  Height = 670
+  Top = 0
+  Width = 730
+  Caption = 'comTest'
+  ClientHeight = 0
+  ClientWidth = 0
+  OnCreate = FormCreate
+  LCLVersion = '2.0.6.0'
+  object Bconnect: TButton
+    Left = 26
+    Height = 25
+    Top = 17
+    Width = 88
+    Caption = 'CONNECT'
+    OnClick = BconnectClick
+    ParentFont = False
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 230
+    Height = 294
+    Top = 51
+    Width = 474
+    OnChange = Memo1Change
+    ParentFont = False
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
+  object Bload: TButton
+    Left = 26
+    Height = 25
+    Top = 154
+    Width = 75
+    Caption = 'LOAD'
+    OnClick = BloadClick
+    ParentFont = False
+    TabOrder = 2
+  end
+  object Edit1: TEdit
+    Left = 141
+    Height = 23
+    Top = 115
+    Width = 80
+    ParentFont = False
+    TabOrder = 3
+  end
+  object Edit2: TEdit
+    Left = 141
+    Height = 23
+    Top = 147
+    Width = 80
+    ParentFont = False
+    TabOrder = 4
+  end
+  object Bunload: TButton
+    Left = 26
+    Height = 25
+    Top = 186
+    Width = 75
+    Caption = 'UNLOAD'
+    OnClick = BunloadClick
+    ParentFont = False
+    TabOrder = 5
+  end
+  object Bget_free: TButton
+    Left = 26
+    Height = 25
+    Top = 218
+    Width = 75
+    Caption = 'GET_FREE'
+    OnClick = Bget_freeClick
+    ParentFont = False
+    TabOrder = 6
+  end
+  object Bget_stored: TButton
+    Left = 26
+    Height = 25
+    Top = 250
+    Width = 90
+    Caption = 'GET_STORED'
+    OnClick = Bget_storedClick
+    ParentFont = False
+    TabOrder = 7
+  end
+  object Bget_part_info: TButton
+    Left = 26
+    Height = 25
+    Top = 282
+    Width = 109
+    Caption = 'GET_PART_INFO'
+    OnClick = Bget_part_infoClick
+    ParentFont = False
+    TabOrder = 8
+  end
+  object Binitialize: TButton
+    Left = 26
+    Height = 25
+    Top = 122
+    Width = 82
+    Caption = 'INITIALIZE'
+    OnClick = BinitializeClick
+    ParentFont = False
+    TabOrder = 9
+  end
+  object Bdo_production: TButton
+    Left = 26
+    Height = 25
+    Top = 493
+    Width = 114
+    Caption = 'DO_PRODUCTION'
+    OnClick = Bdo_productionClick
+    ParentFont = False
+    TabOrder = 10
+  end
+  object Bdo_inbound: TButton
+    Left = 26
+    Height = 25
+    Top = 454
+    Width = 101
+    Caption = 'DO_INBOUND'
+    OnClick = Bdo_inboundClick
+    ParentFont = False
+    TabOrder = 11
+  end
+  object Label1: TLabel
+    Left = 122
+    Height = 15
+    Top = 122
+    Width = 13
+    Caption = '#1'
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 122
+    Height = 15
+    Top = 154
+    Width = 13
+    Caption = '#2'
+    ParentColor = False
+    ParentFont = False
+  end
+  object BDisconnect: TButton
+    Left = 26
+    Height = 25
+    Top = 51
+    Width = 88
+    Caption = 'DISCONNECT'
+    OnClick = BDisconnectClick
+    ParentFont = False
+    TabOrder = 12
+  end
+  object Memo2: TMemo
+    Left = 230
+    Height = 198
+    Top = 403
+    Width = 486
+    ParentFont = False
+    TabOrder = 13
+  end
+  object Label3: TLabel
+    Left = 243
+    Height = 15
+    Top = 32
+    Width = 70
+    Caption = 'COMMANDS'
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label4: TLabel
+    Left = 230
+    Height = 15
+    Top = 378
+    Width = 90
+    Caption = 'FACTORY STATUS'
+    ParentColor = False
+    ParentFont = False
+    OnClick = Label4Click
+  end
+  object Bset_part_defect: TButton
+    Left = 26
+    Height = 25
+    Top = 352
+    Width = 141
+    Caption = 'SET_N_PARTS_DEFECTIVE'
+    OnClick = Bset_part_defectClick
+    ParentFont = False
+    TabOrder = 14
+  end
+  object Bdo_expedition: TButton
+    Left = 26
+    Height = 25
+    Top = 531
+    Width = 101
+    Caption = 'DO_EXPEDITION'
+    OnClick = Bdo_expeditionClick
+    ParentFont = False
+    TabOrder = 15
+  end
+  object Bget_part_quality: TButton
+    Left = 26
+    Height = 26
+    Top = 314
+    Width = 109
+    Caption = 'GET_PART_QUALITY'
+    OnClick = Bget_part_qualityClick
+    ParentFont = False
+    TabOrder = 16
+  end
+  object Bdo_scratch: TButton
+    Left = 26
+    Height = 25
+    Top = 384
+    Width = 101
+    Caption = 'DO_SCRATCH'
+    OnClick = Bdo_scratchClick
+    ParentFont = False
+    TabOrder = 17
+  end
+  object Label5: TLabel
+    Left = 119
+    Height = 15
+    Top = 19
+    Width = 104
+    Caption = 'Commection status'
+    ParentColor = False
+    ParentFont = False
+    OnClick = Label5Click
+  end
+  object Button1: TButton
+    Left = 582
+    Height = 25
+    Top = 17
+    Width = 75
+    Caption = 'Clear'
+    OnClick = Button1Click
+    ParentFont = False
+    TabOrder = 18
+  end
+  object Timer1: TTimer
+    Interval = 500
+    OnTimer = Timer1Timer
+    left = 672
+    top = 13
+  end
+end

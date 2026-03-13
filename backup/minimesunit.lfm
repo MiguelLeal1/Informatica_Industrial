@@ -1,0 +1,225 @@
+object FormMiniMES: TFormMiniMES
+  Left = 443
+  Height = 679
+  Top = 0
+  Width = 913
+  Caption = 'miniMES'
+  ClientHeight = 679
+  ClientWidth = 913
+  DesignTimePPI = 120
+  OnCreate = FormCreate
+  LCLVersion = '2.0.6.0'
+  object Bconnect: TButton
+    Left = 32
+    Height = 31
+    Top = 21
+    Width = 110
+    Caption = 'CONNECT'
+    OnClick = BconnectClick
+    TabOrder = 0
+  end
+  object Memo1: TMemo
+    Left = 288
+    Height = 368
+    Top = 64
+    Width = 592
+    OnChange = Memo1Change
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
+  object Bload: TButton
+    Left = 32
+    Height = 31
+    Top = 192
+    Width = 94
+    Caption = 'LOAD'
+    OnClick = BloadClick
+    TabOrder = 2
+  end
+  object Edit1: TEdit
+    Left = 176
+    Height = 28
+    Top = 144
+    Width = 100
+    TabOrder = 3
+  end
+  object Edit2: TEdit
+    Left = 176
+    Height = 28
+    Top = 184
+    Width = 100
+    TabOrder = 4
+  end
+  object Bunload: TButton
+    Left = 32
+    Height = 31
+    Top = 232
+    Width = 94
+    Caption = 'UNLOAD'
+    OnClick = BunloadClick
+    TabOrder = 5
+  end
+  object Bget_free: TButton
+    Left = 32
+    Height = 31
+    Top = 272
+    Width = 94
+    Caption = 'GET_FREE'
+    OnClick = Bget_freeClick
+    TabOrder = 6
+  end
+  object Bget_stored: TButton
+    Left = 32
+    Height = 31
+    Top = 313
+    Width = 112
+    Caption = 'GET_STORED'
+    OnClick = Bget_storedClick
+    TabOrder = 7
+  end
+  object Bget_part_info: TButton
+    Left = 32
+    Height = 31
+    Top = 352
+    Width = 136
+    Caption = 'GET_PART_INFO'
+    OnClick = Bget_part_infoClick
+    TabOrder = 8
+  end
+  object Binitialize: TButton
+    Left = 32
+    Height = 31
+    Top = 152
+    Width = 102
+    Caption = 'INITIALIZE'
+    OnClick = BinitializeClick
+    TabOrder = 9
+  end
+  object Bdo_production: TButton
+    Left = 32
+    Height = 31
+    Top = 536
+    Width = 143
+    Caption = 'DO_PRODUCTION'
+    OnClick = Bdo_productionClick
+    TabOrder = 10
+  end
+  object Bdo_inbound: TButton
+    Left = 32
+    Height = 31
+    Top = 584
+    Width = 126
+    Caption = 'DO_INBOUND'
+    OnClick = Bdo_inboundClick
+    TabOrder = 11
+  end
+  object Label1: TLabel
+    Left = 152
+    Height = 20
+    Top = 152
+    Width = 17
+    Caption = '#1'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 152
+    Height = 20
+    Top = 192
+    Width = 17
+    Caption = '#2'
+    ParentColor = False
+  end
+  object BDisconnect: TButton
+    Left = 32
+    Height = 31
+    Top = 64
+    Width = 110
+    Caption = 'DISCONNECT'
+    OnClick = BDisconnectClick
+    TabOrder = 12
+  end
+  object Memo2: TMemo
+    Left = 288
+    Height = 248
+    Top = 504
+    Width = 608
+    TabOrder = 13
+  end
+  object Label3: TLabel
+    Left = 304
+    Height = 20
+    Top = 40
+    Width = 86
+    Caption = 'COMMANDS'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 288
+    Height = 20
+    Top = 472
+    Width = 114
+    Caption = 'FACTORY STATUS'
+    ParentColor = False
+    OnClick = Label4Click
+  end
+  object Bset_part_defect: TButton
+    Left = 32
+    Height = 31
+    Top = 440
+    Width = 136
+    Caption = 'SET_PART_DEFECT'
+    OnClick = Bset_part_defectClick
+    TabOrder = 14
+  end
+  object Bdo_expedition: TButton
+    Left = 32
+    Height = 31
+    Top = 624
+    Width = 126
+    Caption = 'DO_EXPEDITION'
+    OnClick = Bdo_expeditionClick
+    TabOrder = 15
+  end
+  object Bget_part_quality: TButton
+    Left = 32
+    Height = 32
+    Top = 392
+    Width = 136
+    Caption = 'GET_PART_QUALITY'
+    OnClick = Bget_part_qualityClick
+    TabOrder = 16
+  end
+  object Bdo_scratch: TButton
+    Left = 32
+    Height = 31
+    Top = 488
+    Width = 126
+    Caption = 'DO_SCRATCH'
+    OnClick = Bdo_scratchClick
+    TabOrder = 17
+  end
+  object Label5: TLabel
+    Left = 149
+    Height = 20
+    Top = 24
+    Width = 127
+    Caption = 'Commection status'
+    ParentColor = False
+    OnClick = Label5Click
+  end
+  object Button1: TButton
+    Left = 728
+    Height = 31
+    Top = 21
+    Width = 94
+    Caption = 'Clear'
+    OnClick = Button1Click
+    TabOrder = 18
+  end
+  object Timer1: TTimer
+    Interval = 500
+    OnTimer = Timer1Timer
+    left = 840
+    top = 16
+  end
+end

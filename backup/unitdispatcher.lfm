@@ -1,0 +1,59 @@
+object FormDispatcher: TFormDispatcher
+  Left = 771
+  Height = 486
+  Top = 120
+  Width = 501
+  Caption = 'Dispatcher'
+  ClientHeight = 486
+  ClientWidth = 501
+  DesignTimePPI = 120
+  OnCreate = FormCreate
+  LCLVersion = '2.2.0.4'
+  object BStart: TButton
+    Left = 10
+    Height = 31
+    Top = 20
+    Width = 174
+    Caption = 'Start'
+    OnClick = BStartClick
+    ParentFont = False
+    TabOrder = 0
+  end
+  object BExecute: TButton
+    Left = 10
+    Height = 31
+    Top = 120
+    Width = 174
+    Caption = 'Execute Cycle'
+    OnClick = BExecuteClick
+    ParentFont = False
+    TabOrder = 1
+  end
+  object Memo1: TMemo
+    Left = 200
+    Height = 462
+    Top = 20
+    Width = 290
+    Lines.Strings = (
+      'Memo1'
+    )
+    ParentFont = False
+    TabOrder = 2
+  end
+  object BInitiatilize: TButton
+    Left = 10
+    Height = 31
+    Top = 70
+    Width = 174
+    Caption = 'Initialize'
+    OnClick = BInitiatilizeClick
+    ParentFont = False
+    TabOrder = 3
+  end
+  object Timer1: TTimer
+    Enabled = False
+    OnTimer = Timer1Timer
+    Left = 43
+    Top = 249
+  end
+end
