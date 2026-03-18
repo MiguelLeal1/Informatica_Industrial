@@ -2,22 +2,22 @@ object FormDispatcher: TFormDispatcher
   Left = 771
   Height = 486
   Top = 120
-  Width = 501
+  Width = 841
   Caption = 'Dispatcher'
   ClientHeight = 486
-  ClientWidth = 501
+  ClientWidth = 841
   DesignTimePPI = 120
+  LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
-  LCLVersion = '2.2.0.4'
   object BStart: TButton
     Left = 10
     Height = 31
     Top = 20
     Width = 174
     Caption = 'Start'
-    OnClick = BStartClick
     ParentFont = False
     TabOrder = 0
+    OnClick = BStartClick
   end
   object BExecute: TButton
     Left = 10
@@ -25,13 +25,13 @@ object FormDispatcher: TFormDispatcher
     Top = 120
     Width = 174
     Caption = 'Execute Cycle'
-    OnClick = BExecuteClick
     ParentFont = False
     TabOrder = 1
+    OnClick = BExecuteClick
   end
   object Memo1: TMemo
     Left = 200
-    Height = 462
+    Height = 128
     Top = 20
     Width = 290
     Lines.Strings = (
@@ -46,14 +46,26 @@ object FormDispatcher: TFormDispatcher
     Top = 70
     Width = 174
     Caption = 'Initialize'
-    OnClick = BInitiatilizeClick
     ParentFont = False
     TabOrder = 3
+    OnClick = BInitiatilizeClick
+  end
+  object GridWarehouse: TStringGrid
+    Left = 200
+    Height = 208
+    Top = 176
+    Width = 392
+    ColCount = 2
+    DefaultColWidth = 180
+    DefaultRowHeight = 30
+    FixedCols = 0
+    RowCount = 6
+    TabOrder = 4
   end
   object Timer1: TTimer
     Enabled = False
     OnTimer = Timer1Timer
-    Left = 43
-    Top = 249
+    Left = 40
+    Top = 184
   end
 end

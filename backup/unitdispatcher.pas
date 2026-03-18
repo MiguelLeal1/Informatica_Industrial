@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  comUnit;
+  Grids, comUnit;
 
 type
 
@@ -65,6 +65,7 @@ type
     BExecute: TButton;
     BInitiatilize: TButton;
     Memo1: TMemo;
+    GridWarehouse: TStringGrid;
     Timer1: TTimer;
     procedure BExecuteClick(Sender: TObject);
     procedure BInitiatilizeClick(Sender: TObject);
@@ -262,6 +263,10 @@ procedure TFormDispatcher.FormCreate(Sender: TObject);
 begin
   SetLength(ShopTasks, 0);
   idx_Task_Executing := 0;
+
+  // Títulos das colunas da grelha do armazém
+  GridWarehouse.Cells[0, 0] := 'Posicao (1,10,19,28,37,46)';
+  GridWarehouse.Cells[1, 0] := 'Tipo de Peca (1-9)';
 end;
 
 procedure TFormDispatcher.Timer1Timer(Sender: TObject);
@@ -275,42 +280,55 @@ end;
 //Initialization of the MES /week. This procedure run only once per week
 procedure TFormDispatcher.BInitiatilizeClick(Sender: TObject);
 var
-    cel, r: integer;
+    cel, r   : integer;
+    i        : integer;  // para percorrer as linhas da grelha
+    pos, part: integer;  // posição e tipo de peça lidos da grelha
 begin
   // *********************************************************
   // WAREHOUSE MANAGEMENT
+  // Inicializa o array do armazém a zeros (sem peças)
+  SetLength(WAREHOUSE_Parts, 55);
+  for cel := 1 to 54 do
+    WAREHOUSE_Parts[cel] := 0;
 
-  // Initialization of parts in the first column of the warehouse.
-  r := M_Initialize(1, Part_Base_Blue);
-  sleep(1500);
-  r := r + M_Initialize(10, Part_Base_Blue);
-  sleep(1500);
-  r := r + M_Initialize(19, Part_Lid_Green);
-  sleep(1500);
-  r := r + M_Initialize(28, Part_Lid_Green);
+  r := 0;
 
-  if( r > 4) then
-    Memo1.Append('Innitiatialization with errors');
-
-
-  //Update the Warehouse according to the previous innitialization
-  SetLength(WAREHOUSE_Parts, 55);                //Parts in the warehouse   55-1 = 54 to start in 1
-  for  cel := 1 to  Length(WAREHOUSE_Parts)-1 do
+  // Lê cada linha da grelha (começa em 1 para saltar o cabeçalho)
+  for i := 1 to GridWarehouse.RowCount - 1 do
   begin
-      WAREHOUSE_Parts[cel] := 0;
+    // Se a linha estiver vazia, ignora e passa à seguinte
+    if (GridWarehouse.Cells[0, i] = '') or
+       (GridWarehouse.Cells[1, i] = '') then Continue;
+
+    // Lê a posição e o tipo de peça escritos pelo utilizador
+    pos  := StrToIntDef(GridWarehouse.Cells[0, i], 0);
+    part := StrToIntDef(GridWarehouse.Cells[1, i], 0);
+
+    // Verifica se a posição é válida (só 1ª coluna do armazém)
+    if (pos = 1)  or (pos = 10) or (pos = 19) or
+       (pos = 28) or (pos = 37) or (pos = 46) then
+    begin
+      // Guarda no array interno
+      WAREHOUSE_Parts[pos] := part;
+
+      // Envia o comando ao autómato
+      r := r + M_Initialize(pos, part);
+      Memo1.Append('Inicializar posicao ' + IntToStr(pos) +
+                   ' com peca ' + IntToStr(part));
+      Sleep(1500);
+    end
+    else
+      Memo1.Append('Posicao invalida: ' + IntToStr(pos));
   end;
-  WAREHOUSE_Parts[1]       := Part_Base_Blue;
-  WAREHOUSE_Parts[10]      := Part_Base_Blue;
-  WAREHOUSE_Parts[19]      := Part_Lid_Green;
-  WAREHOUSE_Parts[28]      := Part_Lid_Green;
 
+  if (r > 0) then
+    Memo1.Append('Inicializacao com erros')
+  else
+    Memo1.Append('Armazem inicializado com sucesso!');
 
-  //Converts ProductionOrders to Tasks (staged activities)
+  // Converte as ordens em tarefas e arranca o dispatcher
   SimpleScheduler(Production_Orders, ShopTasks);
-
-
-  // Starting Dispatcher Iterations over time
-  Timer1.Enabled:= true;
+  Timer1.Enabled := True;
 end;
 
 
@@ -341,7 +359,6 @@ end;
 
 procedure TFormDispatcher.BExecuteClick(Sender: TObject);
 begin
-
   // See the availability of resources
   UpdateResources(ShopResources);
 
