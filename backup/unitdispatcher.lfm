@@ -1,11 +1,11 @@
 object FormDispatcher: TFormDispatcher
-  Left = 771
-  Height = 486
-  Top = 120
-  Width = 841
-  Caption = 'Dispatcher'
-  ClientHeight = 486
-  ClientWidth = 841
+  Left = 501
+  Height = 941
+  Top = 126
+  Width = 1263
+  Caption = 'Form1'
+  ClientHeight = 0
+  ClientWidth = 0
   DesignTimePPI = 120
   LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
@@ -35,7 +35,9 @@ object FormDispatcher: TFormDispatcher
     Top = 20
     Width = 290
     Lines.Strings = (
-      'Memo1'
+      'Acontecimentos:'
+      ''
+      ''
     )
     ParentFont = False
     TabOrder = 2
@@ -51,16 +53,174 @@ object FormDispatcher: TFormDispatcher
     OnClick = BInitiatilizeClick
   end
   object GridWarehouse: TStringGrid
-    Left = 200
-    Height = 208
-    Top = 176
-    Width = 392
+    Left = 152
+    Height = 192
+    Top = 272
+    Width = 368
     ColCount = 2
     DefaultColWidth = 180
     DefaultRowHeight = 30
     FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
     RowCount = 6
     TabOrder = 4
+    Cells = (
+      2
+      0
+      0
+      'Posicao (1,10,19,28,37,46)'
+      1
+      0
+      'Tipo de Peca (1-9)'
+    )
+  end
+  object CmbTipoOrdem: TComboBox
+    Left = 96
+    Height = 28
+    Top = 536
+    Width = 192
+    ItemHeight = 20
+    Items.Strings = (
+      'Expedição'
+      'Produção'
+      'Aprovisionamento'
+    )
+    TabOrder = 5
+  end
+  object CmbTipoPeca: TComboBox
+    Left = 96
+    Height = 28
+    Top = 600
+    Width = 192
+    ItemHeight = 20
+    Items.Strings = (
+      'Materia-Prima Azul'
+      'Materia-Prima Verde'
+      'Materia-Prima Cinzenta'
+      'Base Azul'
+      'Base Verde'
+      'Base Cinzenta'
+      'Tampa Azul'
+      'Tampa Verde'
+      'Tampa Cinzenta'
+    )
+    TabOrder = 6
+  end
+  object EditQuantidade: TEdit
+    Left = 128
+    Height = 28
+    Top = 656
+    Width = 100
+    TabOrder = 7
+  end
+  object BAdicionarOrdem: TButton
+    Left = 96
+    Height = 31
+    Top = 712
+    Width = 94
+    Caption = 'Adicionar'
+    TabOrder = 8
+    OnClick = BAdicionarOrdemClick
+  end
+  object BLimparPlano: TButton
+    Left = 96
+    Height = 31
+    Top = 769
+    Width = 94
+    Caption = 'Limpar'
+    TabOrder = 9
+    OnClick = BLimparPlanoClick
+  end
+  object Label1: TLabel
+    Left = 24
+    Height = 20
+    Top = 536
+    Width = 46
+    Caption = 'Ordem'
+  end
+  object Label2: TLabel
+    Left = 24
+    Height = 20
+    Top = 592
+    Width = 30
+    Caption = 'Peça'
+  end
+  object Label3: TLabel
+    Left = 16
+    Height = 20
+    Top = 656
+    Width = 78
+    Caption = 'Quantidade'
+  end
+  object GridPlanoProducao: TStringGrid
+    Left = 320
+    Height = 280
+    Top = 520
+    Width = 456
+    ColCount = 3
+    DefaultColWidth = 150
+    FixedCols = 0
+    RowCount = 1
+    TabOrder = 10
+    Cells = (
+      3
+      0
+      0
+      'Tipo de Ordem'
+      1
+      0
+      'Tipo de Peça'
+      2
+      0
+      'Quantidade'
+    )
+  end
+  object Label6: TLabel
+    Left = 320
+    Height = 20
+    Top = 488
+    Width = 125
+    Caption = 'Plano de Produção'
+  end
+  object GridProducaoRealizada: TStringGrid
+    Left = 664
+    Height = 280
+    Top = 96
+    Width = 608
+    ColCount = 4
+    DefaultColWidth = 150
+    FixedCols = 0
+    RowCount = 1
+    TabOrder = 11
+    Cells = (
+      4
+      0
+      0
+      'Tipo de Ordem'
+      1
+      0
+      'Tipo de Peça'
+      2
+      0
+      'Estado'
+      3
+      0
+      'Hora'
+    )
+  end
+  object Label4: TLabel
+    Left = 664
+    Height = 20
+    Top = 64
+    Width = 132
+    Caption = 'Produção Realizada'
+  end
+  object Label5: TLabel
+    Left = 40
+    Height = 20
+    Top = 280
+    Width = 82
+    Caption = 'Inicialização'
   end
   object Timer1: TTimer
     Enabled = False

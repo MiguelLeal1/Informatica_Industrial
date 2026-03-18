@@ -64,19 +64,37 @@ type
     BStart: TButton;
     BExecute: TButton;
     BInitiatilize: TButton;
+    BAdicionarOrdem: TButton;
+    BLimparPlano: TButton;
+    CmbTipoOrdem: TComboBox;
+    CmbTipoPeca: TComboBox;
+    EditQuantidade: TEdit;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
     Memo1: TMemo;
     GridWarehouse: TStringGrid;
+    GridPlanoProducao: TStringGrid;
+    GridProducaoRealizada: TStringGrid;
     Timer1: TTimer;
+    procedure BAdicionarOrdemClick(Sender: TObject);
     procedure BExecuteClick(Sender: TObject);
     procedure BInitiatilizeClick(Sender: TObject);
+    procedure BLimparPlanoClick(Sender: TObject);
     procedure BStartClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
+
   private
 
   public
     procedure Dispatcher(var tasks:TArray_Task; var idx : integer; shopfloor: TResources );
     procedure Execute_Expedition_Order(var task:TTask; shopfloor: TResources );
+    procedure Execute_Production_Order(var task:TTask; shopfloor: TResources );
+    procedure Execute_Inbound_Order(var task:TTask; shopfloor: TResources );
     function GET_AR_Position (Part : integer; Warehouse : array of integer): integer;
     procedure SET_AR_Position (idx : integer; Part : integer; var Warehouse : array of integer);
 
@@ -117,9 +135,6 @@ var
 implementation
 
 {$R *.lfm}
-
-
-
 
 
 { Procedure that checks the status of the resources available on the shop floor }
@@ -195,9 +210,24 @@ begin
 end;
 
 
+procedure TFormDispatcher.FormCreate(Sender: TObject);
+begin
+  SetLength(ShopTasks, 0);
+  idx_Task_Executing := 0;
+
+
+end;
+
+
+
+procedure TFormDispatcher.Timer1Timer(Sender: TObject);
+begin
+  BExecuteClick(Self);
+end;
 
 
 // Query DB -> Scheduling -> Connect PLC for Dispatching
+(*
 procedure TFormDispatcher.BStartClick(Sender: TObject);
 var
     result           : integer;
@@ -207,9 +237,6 @@ begin
   // Query to DB and converts data to structures
   // ...      to be completed by the STUDENT after SQL introduction in INFI.
   // *******************************************
-
-
-
 
   // ******************************************
   // Simulating the result of the SQL query:
@@ -258,23 +285,32 @@ begin
     ShowMessage('PLC unavailable. Please try again!');
    end;
 end;
+*)
 
-procedure TFormDispatcher.FormCreate(Sender: TObject);
+procedure TFormDispatcher.BStartClick(Sender: TObject);
+var
+  result : integer;
 begin
-  SetLength(ShopTasks, 0);
+  if Length(Production_Orders) = 0 then
+  begin
+    ShowMessage('Nao existe nenhuma ordem no plano de producao!');
+    Exit;
+  end;
+
+  // for Scheduling
   idx_Task_Executing := 0;
 
-  // Títulos das colunas da grelha do armazém
-  GridWarehouse.Cells[0, 0] := 'Posicao (1,10,19,28,37,46)';
-  GridWarehouse.Cells[1, 0] := 'Tipo de Peca (1-9)';
+  //Connecting to PLC
+  result := M_connect();
+
+  if (result = 1) then
+    BStart.Caption := 'Connected to PLC'
+  else
+  begin
+    BStart.Caption := 'Start';
+    ShowMessage('PLC unavailable. Please try again!');
+  end;
 end;
-
-procedure TFormDispatcher.Timer1Timer(Sender: TObject);
-begin
-  BExecuteClick(Self);
-end;
-
-
 
 
 //Initialization of the MES /week. This procedure run only once per week
@@ -332,6 +368,86 @@ begin
 end;
 
 
+procedure TFormDispatcher.BAdicionarOrdemClick(Sender: TObject);
+var
+  ordem      : TTask_Type;
+  peca       : integer;
+  quantidade : integer;
+  row        : integer;
+  nomeOrdem  : string;
+  nomePeca   : string;
+begin
+  if CmbTipoOrdem.ItemIndex = -1 then
+  begin
+    ShowMessage('Selecione o tipo de ordem!');
+    Exit;
+  end;
+
+  if CmbTipoPeca.ItemIndex = -1 then
+  begin
+    ShowMessage('Selecione o tipo de peca!');
+    Exit;
+  end;
+
+  quantidade := StrToIntDef(EditQuantidade.Text, 0);
+  if quantidade <= 0 then
+  begin
+    ShowMessage('Introduza uma quantidade valida!');
+    Exit;
+  end;
+
+  nomeOrdem := CmbTipoOrdem.Items[CmbTipoOrdem.ItemIndex];
+  nomePeca  := CmbTipoPeca.Items[CmbTipoPeca.ItemIndex];
+
+  case CmbTipoOrdem.ItemIndex of
+    0: ordem := Type_Expedition;
+    1: ordem := Type_Production;
+    2: ordem := Type_Delivery;
+  else
+    ordem := Type_Expedition;
+  end;
+
+  peca := CmbTipoPeca.ItemIndex + 1;
+
+  // Adicionar à grelha
+  row := GridPlanoProducao.RowCount;
+  GridPlanoProducao.RowCount := row + 1;
+  GridPlanoProducao.Cells[0, row] := nomeOrdem;
+  GridPlanoProducao.Cells[1, row] := nomePeca;
+  GridPlanoProducao.Cells[2, row] := IntToStr(quantidade);
+
+  // Adicionar ao array Production_Orders
+  SetLength(Production_Orders, Length(Production_Orders) + 1);
+  Production_Orders[Length(Production_Orders) - 1].order_type   := ordem;
+  Production_Orders[Length(Production_Orders) - 1].part_type    := peca;
+  Production_Orders[Length(Production_Orders) - 1].part_numbers := quantidade;
+
+  // Limpar os campos
+  CmbTipoOrdem.ItemIndex := -1;
+  CmbTipoPeca.ItemIndex  := -1;
+  EditQuantidade.Text    := '';
+
+  Memo1.Append('Ordem adicionada: ' + nomeOrdem + ' | ' + nomePeca + ' | ' + IntToStr(quantidade));
+end;
+
+
+procedure TFormDispatcher.BLimparPlanoClick(Sender: TObject);
+var
+  i : integer;
+begin
+  SetLength(Production_Orders, 0);
+
+  GridPlanoProducao.RowCount := 1;
+  for i := 0 to 2 do
+    GridPlanoProducao.Cells[i, 1] := '';
+
+  CmbTipoOrdem.ItemIndex := -1;
+  CmbTipoPeca.ItemIndex  := -1;
+  EditQuantidade.Text    := '';
+
+  Memo1.Append('Plano de producao limpo.');
+end;
+
 
 // get the first position (cell) in AR that contains the "Part"
 function TFormDispatcher.GET_AR_Position (Part : integer; Warehouse : array of integer): integer;
@@ -355,20 +471,16 @@ begin
 end;
 
 
-
-
 procedure TFormDispatcher.BExecuteClick(Sender: TObject);
 begin
   // See the availability of resources
   UpdateResources(ShopResources);
-
 
   //Dispatcher executing per cycle.
   if(Length(ShopTasks)>0) then begin
     Dispatcher(ShopTasks, idx_Task_Executing, ShopResources);
   end;
 end;
-
 
 
 // Global Dispatcher - SIMPLEX
@@ -390,18 +502,32 @@ begin
         end;
       end;
 
-
       // Production
       Type_Production :
       begin
-        //todo
-      end;
+        if(idx < Length(tasks)) then
+        begin
+          Memo1.Append('Task Production');
+          Execute_Production_Order(tasks[idx], shopfloor);
 
+          // Next Operation to be executed.
+          if(tasks[idx].current_operation = Stage_Finished) then
+            inc(idx_Task_Executing);
+        end;
+      end;
 
       // Inbound
       Type_Delivery :
       begin
-        //todo
+        if(idx < Length(tasks)) then
+        begin
+          Memo1.Append('Task Inbound');
+          Execute_Inbound_Order(tasks[idx], shopfloor);
+
+          // Next Operation to be executed.
+          if(tasks[idx].current_operation = Stage_Finished) then
+            inc(idx_Task_Executing);
+        end;
       end;
 
       // Trash
@@ -418,6 +544,7 @@ end;
 procedure TFormDispatcher.Execute_Expedition_Order(var task:TTask; shopfloor: TResources );
 var
     r : integer;
+    row : integer;
 begin
   //  TStage      = (Stage_To_Be_Started = 1, Stage_GetPart, Stage_Unload, Stage_To_AR_Out, Stage_Clear_Pos_AR, Stage_Finished);   //TbC
 
@@ -481,15 +608,214 @@ begin
 
         //Done.
         Stage_Finished :
-        begin
-          current_operation :=  Stage_Finished;
-        end;
+            begin
+              // Registar na grelha de produção realizada
+              row := GridProducaoRealizada.RowCount;
+              GridProducaoRealizada.RowCount := row + 1;
+              GridProducaoRealizada.Cells[0, row] := 'Expedicao';
+              GridProducaoRealizada.Cells[1, row] := IntToStr(part_type);
+              GridProducaoRealizada.Cells[2, row] := 'Concluido';
+              GridProducaoRealizada.Cells[3, row] := TimeToStr(Now);
+
+              current_operation := Stage_Finished;
+            end;
       end;
   end;
 end;
 
 
+procedure TFormDispatcher.Execute_Production_Order(var task: TTask; shopfloor: TResources);
+var
+  r            : integer;
+  raw_material : integer;
+  free_pos     : integer;
+  row : integer;
+begin
+
+  // Determina a matéria-prima necessária com base no tipo de peça final
+  case task.part_type of
+    Part_Base_Blue,  Part_Lid_Blue  : raw_material := Part_Raw_Blue;
+    Part_Base_Green, Part_Lid_Green : raw_material := Part_Raw_Green;
+    Part_Base_Grey,  Part_Lid_Grey  : raw_material := Part_Raw_Grey;
+  else
+    raw_material := 0;
+  end;
+
+  with task do
+  begin
+    case current_operation of
+
+      // Inicia a tarefa
+      Stage_To_Be_Started:
+      begin
+        current_operation := Stage_GetPart;
+      end;
+
+      // Procura a matéria-prima no armazém
+      Stage_GetPart:
+      begin
+        if shopfloor.AR_free then
+        begin
+          Part_Position_AR := GET_AR_Position(raw_material, WAREHOUSE_Parts);
+          Memo1.Append('Materia-prima encontrada na posicao: ' + IntToStr(Part_Position_AR));
+
+          if Part_Position_AR > 0 then
+            current_operation := Stage_Unload
+          else
+            current_operation := Stage_GetPart;
+        end;
+      end;
+
+      // Retira a matéria-prima do armazém
+      Stage_Unload:
+      begin
+        Memo1.Append('AR a descarregar posicao: ' + IntToStr(Part_Position_AR));
+        r := M_Unload(Part_Position_AR);
+
+        if r = 1 then
+          current_operation := Stage_To_AR_Out;
+      end;
+
+      // Aguarda a peça no tapete de saída e envia para a célula
+      Stage_To_AR_Out:
+      begin
+        if shopfloor.AR_Out_Part = raw_material then
+        begin
+          Memo1.Append('A enviar para celula: ' + IntToStr(Part_Destination));
+          r := M_Do_Production(Part_Destination);
+
+          if r = 1 then
+            current_operation := Stage_Clear_Pos_AR;
+        end;
+      end;
+
+      // Limpa a posição antiga e aguarda o produto final; armazena-o
+      Stage_Clear_Pos_AR:
+      begin
+        SET_AR_Position(Part_Position_AR, 0, WAREHOUSE_Parts);
+
+        if shopfloor.AR_In_Part = part_type then
+        begin
+          free_pos := GET_AR_Position(0, WAREHOUSE_Parts);
+
+          if free_pos > 0 then
+          begin
+            Memo1.Append('A armazenar produto final na posicao: ' + IntToStr(free_pos));
+            r := M_Load(free_pos);
+
+            if r = 1 then
+            begin
+              SET_AR_Position(free_pos, part_type, WAREHOUSE_Parts);
+              current_operation := Stage_Finished;
+            end;
+          end;
+        end;
+      end;
+
+      // Tarefa concluída
+      Stage_Finished:
+        begin
+          // Registar na grelha de produção realizada
+          row := GridProducaoRealizada.RowCount;
+          GridProducaoRealizada.RowCount := row + 1;
+          GridProducaoRealizada.Cells[0, row] := 'Producao';
+          GridProducaoRealizada.Cells[1, row] := IntToStr(part_type);
+          GridProducaoRealizada.Cells[2, row] := 'Concluido';
+          GridProducaoRealizada.Cells[3, row] := TimeToStr(Now);
+
+          current_operation := Stage_Finished;
+        end;
+
+    end;
+  end;
+end;
+
+
+procedure TFormDispatcher.Execute_Inbound_Order(var task: TTask; shopfloor: TResources);
+var
+  r        : integer;
+  free_pos : integer;
+  row : integer;
+begin
+  with task do
+  begin
+    case current_operation of
+
+      // Inicia a tarefa
+      Stage_To_Be_Started:
+      begin
+        current_operation := Stage_GetPart;
+      end;
+
+      // Verifica se o Inbound está livre para receber a peça
+      Stage_GetPart:
+      begin
+        if shopfloor.Inbound_free then
+        begin
+          Memo1.Append('Inbound livre, a enviar peca: ' + IntToStr(part_type));
+          r := M_Do_Inbound(part_type);
+
+          if r = 1 then
+            current_operation := Stage_Unload
+          else
+            current_operation := Stage_GetPart;
+        end;
+      end;
+
+      // Aguarda que a peça chegue à entrada do armazém
+      Stage_Unload:
+      begin
+        if shopfloor.AR_In_Part = part_type then
+        begin
+          Memo1.Append('Peca chegou a entrada do armazem: ' + IntToStr(part_type));
+          current_operation := Stage_To_AR_Out;
+        end;
+      end;
+
+      // Procura uma posição livre e armazena a peça
+      Stage_To_AR_Out:
+      begin
+        if shopfloor.AR_free then
+        begin
+          free_pos := GET_AR_Position(0, WAREHOUSE_Parts);
+
+          if free_pos > 0 then
+          begin
+            Memo1.Append('A armazenar na posicao: ' + IntToStr(free_pos));
+            r := M_Load(free_pos);
+
+            if r = 1 then
+              current_operation := Stage_Clear_Pos_AR;
+          end;
+        end;
+      end;
+
+      // Atualiza o mapa interno do armazém
+      Stage_Clear_Pos_AR:
+      begin
+        SET_AR_Position(free_pos, part_type, WAREHOUSE_Parts);
+        Memo1.Append('Armazem atualizado: posicao ' + IntToStr(free_pos) +
+                     ' com peca ' + IntToStr(part_type));
+        current_operation := Stage_Finished;
+      end;
+
+      // Tarefa concluída
+      Stage_Finished:
+          begin
+            // Registar na grelha de produção realizada
+            row := GridProducaoRealizada.RowCount;
+            GridProducaoRealizada.RowCount := row + 1;
+            GridProducaoRealizada.Cells[0, row] := 'Aprovisionamento';
+            GridProducaoRealizada.Cells[1, row] := IntToStr(part_type);
+            GridProducaoRealizada.Cells[2, row] := 'Concluido';
+            GridProducaoRealizada.Cells[3, row] := TimeToStr(Now);
+
+            current_operation := Stage_Finished;
+          end;
+
+    end;
+  end;
+end;
 
 
 end.
-
