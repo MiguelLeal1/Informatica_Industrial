@@ -1,27 +1,28 @@
 object ComForm: TComForm
-  Left = 869
-  Height = 287
-  Top = 387
+  Left = 950
+  Height = 288
+  Top = 257
   Width = 639
   Caption = 'ComForm'
-  ClientHeight = 287
+  ClientHeight = 288
   ClientWidth = 639
   DesignTimePPI = 120
+  LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
-  LCLVersion = '2.0.6.0'
   object Splitter1: TSplitter
     Left = 0
-    Height = 287
+    Height = 288
     Top = 0
     Width = 6
   end
   object Label1: TLabel
     Left = 76
     Height = 20
-    Top = 117
+    Top = 118
     Width = 44
     Caption = 'Label1'
     ParentColor = False
+    ParentFont = False
   end
   object TCP_UDPPort1: TTCP_UDPPort
     Host = '127.0.0.1'
@@ -31,14 +32,14 @@ object ComForm: TComForm
     OnCommPortOpenError = TCP_UDPPort1CommPortOpenError
     OnCommErrorReading = TCP_UDPPort1CommErrorReading
     OnCommPortDisconnected = TCP_UDPPort1CommPortDisconnected
-    left = 80
-    top = 40
+    Left = 80
+    Top = 40
   end
   object ModBusTCPDriver1: TModBusTCPDriver
     CommunicationPort = TCP_UDPPort1
     ReadOnly = False
-    left = 216
-    top = 40
+    Left = 216
+    Top = 40
   end
   object Cmd_data: TPLCBlock
     TagGUID = '{BC9A3FE5-08ED-4BB4-94E6-18FC397C8B4B}'
@@ -54,11 +55,12 @@ object ComForm: TComForm
     MemWriteFunction = 16
     ProtocolDriver = ModBusTCPDriver1
     UpdateTime = 100
+    LongAddress = ''
     Size = 5
     OnUpdate = Cmd_dataUpdate
     OnAsyncValueChange = Cmd_dataAsyncValueChange
-    left = 344
-    top = 40
+    Left = 344
+    Top = 40
   end
   object Cmd_R: TPLCBlock
     TagGUID = '{1ABAA75A-E12B-475D-BEB9-9386FC8CCECB}'
@@ -72,10 +74,11 @@ object ComForm: TComForm
     MemWriteFunction = 0
     ProtocolDriver = ModBusTCPDriver1
     UpdateTime = 100
+    LongAddress = ''
     Size = 14
     OnAsyncValueChange = Cmd_RAsyncValueChange
     SyncWrites = True
-    left = 448
-    top = 40
+    Left = 448
+    Top = 40
   end
 end
