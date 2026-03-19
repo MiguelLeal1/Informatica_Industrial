@@ -14,7 +14,7 @@ object FormDispatcher: TFormDispatcher
     Height = 31
     Top = 56
     Width = 174
-    Caption = 'Start'
+    Caption = 'Ler Plano Produção'
     ParentFont = False
     TabOrder = 0
     OnClick = BStartClick
@@ -24,7 +24,7 @@ object FormDispatcher: TFormDispatcher
     Height = 31
     Top = 152
     Width = 174
-    Caption = 'Execute Cycle'
+    Caption = 'Atualizar dados'
     ParentFont = False
     TabOrder = 1
     OnClick = BExecuteClick
@@ -47,7 +47,7 @@ object FormDispatcher: TFormDispatcher
     Height = 31
     Top = 104
     Width = 174
-    Caption = 'Initialize'
+    Caption = 'Iniciar Produção'
     ParentFont = False
     TabOrder = 3
     OnClick = BInitiatilizeClick

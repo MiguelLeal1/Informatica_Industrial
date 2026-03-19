@@ -293,7 +293,7 @@ var
 begin
   if Length(Production_Orders) = 0 then
   begin
-    ShowMessage('Nao existe nenhuma ordem no plano de producao!');
+    ShowMessage('Nao existe nenhuma ordem no plano de produção!');
     Exit;
   end;
 
@@ -307,7 +307,7 @@ begin
     BStart.Caption := 'Connected to PLC'
   else
   begin
-    BStart.Caption := 'Start';
+    BStart.Caption := 'Ler Plano de Produção';
     ShowMessage('PLC unavailable. Please try again!');
   end;
 end;
@@ -403,8 +403,6 @@ begin
     0: ordem := Type_Expedition;
     1: ordem := Type_Production;
     2: ordem := Type_Delivery;
-  else
-    ordem := Type_Expedition;
   end;
 
   peca := CmbTipoPeca.ItemIndex + 1;
@@ -607,7 +605,7 @@ begin
         end;
 
         //Done.
-        Stage_Finished :
+       (* Stage_Finished :
             begin
               // Registar na grelha de produção realizada
               row := GridProducaoRealizada.RowCount;
@@ -618,7 +616,7 @@ begin
               GridProducaoRealizada.Cells[3, row] := TimeToStr(Now);
 
               current_operation := Stage_Finished;
-            end;
+            end; *)
       end;
   end;
 end;
@@ -734,8 +732,8 @@ end;
 procedure TFormDispatcher.Execute_Inbound_Order(var task: TTask; shopfloor: TResources);
 var
   r        : integer;
-  free_pos : integer;
   row : integer;
+
 begin
   with task do
   begin
@@ -752,7 +750,7 @@ begin
       begin
         if shopfloor.Inbound_free then
         begin
-          Memo1.Append('Inbound livre, a enviar peca: ' + IntToStr(part_type));
+          Memo1.Append('Inbound livre, a enviar peça: ' + IntToStr(part_type));
           r := M_Do_Inbound(part_type);
 
           if r = 1 then
@@ -762,45 +760,45 @@ begin
         end;
       end;
 
-      // Aguarda que a peça chegue à entrada do armazém
+      // Espera que a peça chegue à entrada do armazém
       Stage_Unload:
       begin
         if shopfloor.AR_In_Part = part_type then
         begin
-          Memo1.Append('Peca chegou a entrada do armazem: ' + IntToStr(part_type));
+          Memo1.Append('Peça chegou a entrada do armazem: ' + IntToStr(part_type));
           current_operation := Stage_To_AR_Out;
         end;
       end;
 
-      // Procura uma posição livre e armazena a peça
+      // Procura posição livre e armazena a peça
       Stage_To_AR_Out:
-      begin
-        if shopfloor.AR_free then
-        begin
-          free_pos := GET_AR_Position(0, WAREHOUSE_Parts);
-
-          if free_pos > 0 then
           begin
-            Memo1.Append('A armazenar na posicao: ' + IntToStr(free_pos));
-            r := M_Load(free_pos);
+            if shopfloor.AR_free then
+            begin
+              Part_Position_AR := GET_AR_Position(0, WAREHOUSE_Parts);
 
-            if r = 1 then
-              current_operation := Stage_Clear_Pos_AR;
+              if Part_Position_AR > 0 then
+              begin
+                Memo1.Append('A armazenar na posicao: ' + IntToStr(Part_Position_AR));
+                r := M_Load(Part_Position_AR);
+
+                if r = 1 then
+                  current_operation := Stage_Clear_Pos_AR;
+              end;
+            end;
           end;
-        end;
-      end;
 
       // Atualiza o mapa interno do armazém
       Stage_Clear_Pos_AR:
-      begin
-        SET_AR_Position(free_pos, part_type, WAREHOUSE_Parts);
-        Memo1.Append('Armazem atualizado: posicao ' + IntToStr(free_pos) +
-                     ' com peca ' + IntToStr(part_type));
-        current_operation := Stage_Finished;
-      end;
+          begin
+            SET_AR_Position(Part_Position_AR, part_type, WAREHOUSE_Parts);
+            Memo1.Append('Armazem atualizado: posicao ' + IntToStr(Part_Position_AR) +
+                         ' com peca ' + IntToStr(part_type));
+            current_operation := Stage_Finished;
+          end;
 
       // Tarefa concluída
-      Stage_Finished:
+     (* Stage_Finished:
           begin
             // Registar na grelha de produção realizada
             row := GridProducaoRealizada.RowCount;
@@ -811,7 +809,7 @@ begin
             GridProducaoRealizada.Cells[3, row] := TimeToStr(Now);
 
             current_operation := Stage_Finished;
-          end;
+          end; *)
 
     end;
   end;
