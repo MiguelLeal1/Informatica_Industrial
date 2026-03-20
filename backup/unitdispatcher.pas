@@ -61,6 +61,7 @@ type
 
   { TFormDispatcher }
   TFormDispatcher = class(TForm)
+    BInitiatilizeClick: TButton;
     BStart: TButton;
     BExecute: TButton;
     BAdicionarOrdem: TButton;
@@ -240,10 +241,13 @@ begin
   result := M_connect();
 
   if (result = 1) then
-    BStart.Caption := 'Connected to PLC'
+  begin
+    BStart.Caption := 'Connected to PLC';
+    // inicialização do armazém aqui dentro
+  end
   else
   begin
-    BStart.Caption := 'Inicializar Inventário';
+    BStart.Caption := 'Start';
     ShowMessage('PLC unavailable. Please try again!');
   end;
   begin
@@ -255,40 +259,43 @@ begin
   for cel := 1 to 54 do
     WAREHOUSE_Parts[cel] := 0;
 
+  sleep(2000);
   r := 0;
 
-  // Lê cada linha da grelha (começa em 1 para saltar o cabeçalho)
-  for i := 1 to GridWarehouse.RowCount - 1 do
+// Lê cada linha da grelha (começa em 1 para saltar o cabeçalho)
+for i := 1 to GridWarehouse.RowCount - 1 do
+begin
+  // Se a linha estiver vazia, ignora e passa à seguinte
+  if (GridWarehouse.Cells[0, i] = '') or
+     (GridWarehouse.Cells[1, i] = '') then Continue;
+
+  // Lê a posição e o tipo de peça escritos pelo utilizador
+  pos  := StrToIntDef(GridWarehouse.Cells[0, i], 0);
+  part := StrToIntDef(GridWarehouse.Cells[1, i], 0);
+
+  // Verifica se a posição é válida (só 1ª coluna do armazém)
+  if (pos = 1)  or (pos = 10) or (pos = 19) or
+     (pos = 28) or (pos = 37) or (pos = 46) then
   begin
-    // Se a linha estiver vazia, ignora e passa à seguinte
-    if (GridWarehouse.Cells[0, i] = '') or
-       (GridWarehouse.Cells[1, i] = '') then Continue;
+    // Guarda no array interno
+    WAREHOUSE_Parts[pos] := part;
 
-    // Lê a posição e o tipo de peça escritos pelo utilizador
-    pos  := StrToIntDef(GridWarehouse.Cells[0, i], 0);
-    part := StrToIntDef(GridWarehouse.Cells[1, i], 0);
+    // Se M_Initialize retornar negativo, conta como erro
+    if M_Initialize(pos, part) < 0 then
+      r := r + 1;
 
-    // Verifica se a posição é válida (só 1ª coluna do armazém)
-    if (pos = 1)  or (pos = 10) or (pos = 19) or
-       (pos = 28) or (pos = 37) or (pos = 46) then
-    begin
-      // Guarda no array interno
-      WAREHOUSE_Parts[pos] := part;
-
-      // Envia o comando ao autómato
-      r := r + M_Initialize(pos, part);
-      Memo1.Append('Inicializar posição ' + IntToStr(pos) +
-                   ' com peça ' + IntToStr(part));
-      Sleep(3000);
-    end
-    else
-      Memo1.Append('Posição inválida: ' + IntToStr(pos));
-  end;
-
-  if (r > 0) then
-    Memo1.Append('Inicialização com erros')
+    Memo1.Append('Inicializar posição ' + IntToStr(pos) +
+                 ' com peça ' + IntToStr(part));
+    Sleep(3000);
+  end
   else
-    Memo1.Append('Armazém inicializado com sucesso!');
+    Memo1.Append('Posição inválida: ' + IntToStr(pos));
+end;
+
+if (r > 0) then
+  Memo1.Append('Inicialização com erros')
+else
+  Memo1.Append('Armazém inicializado com sucesso!');
 
 end;
 end;
@@ -411,11 +418,13 @@ end;
 
 procedure TFormDispatcher.BExecuteClick(Sender: TObject);
 begin
-  // See the availability of resources
   UpdateResources(ShopResources);
 
-  //Dispatcher executing per cycle.
-  if(Length(ShopTasks)>0) then begin
+  // Linha de debug - apaga depois de resolver o problema
+  Memo1.Append('Ciclo: tasks=' + IntToStr(Length(ShopTasks)) +
+               ' idx=' + IntToStr(idx_Task_Executing));
+
+  if(Length(ShopTasks) > 0) then begin
     Dispatcher(ShopTasks, idx_Task_Executing, ShopResources);
   end;
 end;

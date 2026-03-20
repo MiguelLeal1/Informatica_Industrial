@@ -1,8 +1,8 @@
 object FormDispatcher: TFormDispatcher
-  Left = 255
-  Height = 888
-  Top = 198
-  Width = 1263
+  Left = 293
+  Height = 863
+  Top = 95
+  Width = 1225
   Caption = 'Form1'
   ClientHeight = 0
   ClientWidth = 0
@@ -42,28 +42,6 @@ object FormDispatcher: TFormDispatcher
     ParentFont = False
     TabOrder = 2
   end
-  object GridWarehouse: TStringGrid
-    Left = 24
-    Height = 192
-    Top = 64
-    Width = 368
-    ColCount = 2
-    DefaultColWidth = 180
-    DefaultRowHeight = 30
-    FixedCols = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
-    RowCount = 6
-    TabOrder = 3
-    Cells = (
-      2
-      0
-      0
-      'Posicao (1,10,19,28,37,46)'
-      1
-      0
-      'Tipo de Peca (1-9)'
-    )
-  end
   object CmbTipoOrdem: TComboBox
     Left = 96
     Height = 28
@@ -75,7 +53,7 @@ object FormDispatcher: TFormDispatcher
       'Produção'
       'Aprovisionamento'
     )
-    TabOrder = 4
+    TabOrder = 3
   end
   object CmbTipoPeca: TComboBox
     Left = 96
@@ -94,14 +72,14 @@ object FormDispatcher: TFormDispatcher
       'Tampa Verde'
       'Tampa Cinzenta'
     )
-    TabOrder = 5
+    TabOrder = 4
   end
   object EditQuantidade: TEdit
     Left = 160
     Height = 28
     Top = 448
     Width = 100
-    TabOrder = 6
+    TabOrder = 5
   end
   object BAdicionarOrdem: TButton
     Left = 104
@@ -109,7 +87,7 @@ object FormDispatcher: TFormDispatcher
     Top = 504
     Width = 104
     Caption = 'Adicionar'
-    TabOrder = 7
+    TabOrder = 6
     OnClick = BAdicionarOrdemClick
   end
   object BLimparPlano: TButton
@@ -118,7 +96,7 @@ object FormDispatcher: TFormDispatcher
     Top = 552
     Width = 176
     Caption = 'Anular Última Operação'
-    TabOrder = 8
+    TabOrder = 7
     OnClick = BLimparPlanoClick
   end
   object Label1: TLabel
@@ -151,7 +129,7 @@ object FormDispatcher: TFormDispatcher
     DefaultColWidth = 150
     FixedCols = 0
     RowCount = 1
-    TabOrder = 9
+    TabOrder = 8
     Cells = (
       3
       0
@@ -181,7 +159,7 @@ object FormDispatcher: TFormDispatcher
     DefaultColWidth = 150
     FixedCols = 0
     RowCount = 1
-    TabOrder = 10
+    TabOrder = 9
     Cells = (
       4
       0
@@ -218,7 +196,30 @@ object FormDispatcher: TFormDispatcher
     Top = 608
     Width = 181
     Caption = 'Iniciar Plano Produção'
+    TabOrder = 10
+    OnClick = BInitiatilizeClick
+  end
+  object GridWarehouse: TStringGrid
+    Left = 24
+    Height = 192
+    Top = 64
+    Width = 368
+    ColCount = 2
+    DefaultColWidth = 180
+    DefaultRowHeight = 30
+    FixedCols = 0
+    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
+    RowCount = 6
     TabOrder = 11
+    Cells = (
+      2
+      0
+      0
+      'Posicao (1,10,19,28,37,46)'
+      1
+      0
+      'Tipo de Peca (1-9)'
+    )
   end
   object Timer1: TTimer
     Enabled = False

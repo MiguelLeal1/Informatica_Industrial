@@ -45,7 +45,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="43"/>
         <CursorPos X="21" Y="53"/>
-        <UsageCount Value="92"/>
+        <UsageCount Value="95"/>
       </Unit3>
       <Unit4>
         <Filename Value="unitdispatcher.pas"/>
@@ -55,10 +55,10 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <TopLine Value="246"/>
-        <CursorPos X="15" Y="258"/>
+        <TopLine Value="396"/>
+        <CursorPos X="5" Y="430"/>
         <ComponentState Value="1"/>
-        <UsageCount Value="91"/>
+        <UsageCount Value="94"/>
         <Bookmarks Count="1">
           <Item0 Left="1" Top="1" ID="7"/>
         </Bookmarks>
@@ -80,123 +80,123 @@
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="230" Column="3" TopLine="227"/>
+        <Caret Line="472" Column="63" TopLine="320"/>
       </Position1>
       <Position2>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="229" Column="3" TopLine="226"/>
+        <Caret Line="700" Column="41" TopLine="677"/>
       </Position2>
       <Position3>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="222" Column="2" TopLine="171"/>
+        <Caret Line="631" Column="14" TopLine="619"/>
       </Position3>
       <Position4>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="746" Column="17" TopLine="718"/>
+        <Caret Line="283" Column="71" TopLine="274"/>
       </Position4>
       <Position5>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="814" Column="13" TopLine="790"/>
+        <Caret Line="420" Column="8" TopLine="293"/>
       </Position5>
       <Position6>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="216" Column="103" TopLine="184"/>
+        <Caret Line="85" Column="7" TopLine="68"/>
       </Position6>
       <Position7>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="218" Column="103" TopLine="218"/>
+        <Caret Line="84" Column="7" TopLine="67"/>
       </Position7>
       <Position8>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="222" TopLine="211"/>
+        <Caret Line="487" Column="19" TopLine="471"/>
       </Position8>
       <Position9>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="785" Column="50" TopLine="496"/>
+        <Caret Line="492" Column="39" TopLine="449"/>
       </Position9>
       <Position10>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="354" Column="12" TopLine="271"/>
+        <Caret Line="359" Column="10" TopLine="333"/>
       </Position10>
       <Position11>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="472" Column="63" TopLine="320"/>
+        <Caret Line="367" Column="28" TopLine="324"/>
       </Position11>
       <Position12>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="700" Column="41" TopLine="677"/>
+        <Caret Line="372" Column="18" TopLine="350"/>
       </Position12>
       <Position13>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="631" Column="14" TopLine="619"/>
+        <Caret Line="375" Column="18" TopLine="354"/>
       </Position13>
       <Position14>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="283" Column="71" TopLine="274"/>
+        <Caret Line="369" TopLine="350"/>
       </Position14>
       <Position15>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="420" Column="8" TopLine="293"/>
+        <Caret Line="358" TopLine="347"/>
       </Position15>
       <Position16>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="85" Column="7" TopLine="68"/>
+        <Caret Line="351" Column="94" TopLine="348"/>
       </Position16>
       <Position17>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="84" Column="7" TopLine="67"/>
+        <Caret Line="90" Column="28" TopLine="65"/>
       </Position17>
       <Position18>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="487" Column="19" TopLine="471"/>
+        <Caret Line="85" Column="33" TopLine="63"/>
       </Position18>
       <Position19>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="492" Column="39" TopLine="449"/>
+        <Caret Line="75" Column="55" TopLine="63"/>
       </Position19>
       <Position20>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="359" Column="10" TopLine="333"/>
+        <Caret Line="84" Column="5" TopLine="76"/>
       </Position20>
       <Position21>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="367" Column="28" TopLine="324"/>
+        <Caret Line="258" Column="15"/>
       </Position21>
       <Position22>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="372" Column="18" TopLine="350"/>
+        <Caret Line="429" Column="5" TopLine="399"/>
       </Position22>
       <Position23>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="375" Column="18" TopLine="354"/>
+        <Caret Line="431" Column="5" TopLine="401"/>
       </Position23>
       <Position24>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="369" TopLine="350"/>
+        <Caret Line="430" Column="5" TopLine="400"/>
       </Position24>
       <Position25>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="358" TopLine="347"/>
+        <Caret Line="429" Column="5" TopLine="399"/>
       </Position25>
       <Position26>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="351" Column="94" TopLine="348"/>
+        <Caret Line="400" TopLine="400"/>
       </Position26>
       <Position27>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="90" Column="28" TopLine="65"/>
+        <Caret Line="90" Column="66" TopLine="69"/>
       </Position27>
       <Position28>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="85" Column="33" TopLine="63"/>
+        <Caret Line="298" Column="74" TopLine="270"/>
       </Position28>
       <Position29>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="75" Column="55" TopLine="63"/>
+        <Caret Line="167" Column="92" TopLine="152"/>
       </Position29>
       <Position30>
         <Filename Value="unitdispatcher.pas"/>
-        <Caret Line="84" Column="5" TopLine="76"/>
+        <Caret Line="429" Column="5" TopLine="395"/>
       </Position30>
     </JumpHistory>
     <RunParams>
