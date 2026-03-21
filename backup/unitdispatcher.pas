@@ -61,14 +61,18 @@ type
 
   { TFormDispatcher }
   TFormDispatcher = class(TForm)
-    BInitiatilizeClick: TButton;
+    BtnIniciarPlano: TButton;
+    BtnIniciarPlano: TButton;
     BStart: TButton;
     BExecute: TButton;
     BAdicionarOrdem: TButton;
     BLimparPlano: TButton;
     BInitialize: TButton;
+    BAdicionarPecaWarehouse: TButton;
     CmbTipoOrdem: TComboBox;
     CmbTipoPeca: TComboBox;
+    CmbTipoPecaWarehouse: TComboBox;
+    EditQuantidadeWarehouse: TEdit;
     EditQuantidade: TEdit;
     Label1: TLabel;
     Label2: TLabel;
@@ -77,13 +81,17 @@ type
     Label5: TLabel;
     Label6: TLabel;
     Memo1: TMemo;
-    GridWarehouse: TStringGrid;
     GridPlanoProducao: TStringGrid;
     GridProducaoRealizada: TStringGrid;
+    LabelTipoDePeca: TStaticText;
+    QuantidadeDaPecaAAdicionar: TStaticText;
+    GridEstadoArmazem: TStringGrid;
+    EstadoArmazem: TStaticText;
     Timer1: TTimer;
     procedure BAdicionarOrdemClick(Sender: TObject);
+    procedure BAdicionarPecaWarehouseClick(Sender: TObject);
     procedure BExecuteClick(Sender: TObject);
-    procedure BInitiatilizeClick(Sender: TObject);
+    procedure BIniciarPlano(Sender: TObject);
     procedure BLimparPlanoClick(Sender: TObject);
     procedure BStartClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -216,7 +224,26 @@ begin
   SetLength(ShopTasks, 0);
   idx_Task_Executing := 0;
 
+  // Preenche a ComboBox com os nomes das peças
+  CmbTipoPecaWarehouse.Items.Add('Matéria-Prima Azul');    // índice 0 -> peça 1
+  CmbTipoPecaWarehouse.Items.Add('Matéria-Prima Verde');   // índice 1 -> peça 2
+  CmbTipoPecaWarehouse.Items.Add('Matéria-Prima Metal');   // índice 2 -> peça 3
+  CmbTipoPecaWarehouse.Items.Add('Base Azul');             // índice 3 -> peça 4
+  CmbTipoPecaWarehouse.Items.Add('Base Verde');            // índice 4 -> peça 5
+  CmbTipoPecaWarehouse.Items.Add('Base Metal');            // índice 5 -> peça 6
+  CmbTipoPecaWarehouse.Items.Add('Tampa Azul');            // índice 6 -> peça 7
+  CmbTipoPecaWarehouse.Items.Add('Tampa Verde');           // índice 7 -> peça 8
+  CmbTipoPecaWarehouse.Items.Add('Tampa Metal');           // índice 8 -> peça 9
 
+  // Configura a grelha de estado do armazém
+  GridEstadoArmazem.ColCount        := 2;
+  GridEstadoArmazem.RowCount        := 1;  // só cabeçalho por agora
+  GridEstadoArmazem.FixedRows       := 1;
+  GridEstadoArmazem.FixedCols       := 0;
+  GridEstadoArmazem.ColWidths[0]    := 100;
+  GridEstadoArmazem.ColWidths[1]    := 150;
+  GridEstadoArmazem.Cells[0, 0]     := 'Posição';
+  GridEstadoArmazem.Cells[1, 0]     := 'Peça';
 end;
 
 
@@ -229,78 +256,21 @@ end;
 procedure TFormDispatcher.BStartClick(Sender: TObject);
 var
   result : integer;
-  cel, r   : integer;
-  i        : integer;  // para percorrer as linhas da grelha
-  pos, part: integer;  // posição e tipo de peça lidos da grelha
 begin
-
-  // for Scheduling
   idx_Task_Executing := 0;
 
-  //Connecting to PLC
   result := M_connect();
 
   if (result = 1) then
-  begin
-    BStart.Caption := 'Connected to PLC';
-    // inicialização do armazém aqui dentro
-  end
+    BStart.Caption := 'Connected to PLC'
   else
   begin
     BStart.Caption := 'Start';
     ShowMessage('PLC unavailable. Please try again!');
   end;
-  begin
-
-  // *********************************************************
-  // WAREHOUSE MANAGEMENT
-  // Inicializa o array do armazém a zeros (sem peças)
-  SetLength(WAREHOUSE_Parts, 55);
-  for cel := 1 to 54 do
-    WAREHOUSE_Parts[cel] := 0;
-
-  sleep(2000);
-  r := 0;
-
-// Lê cada linha da grelha (começa em 1 para saltar o cabeçalho)
-for i := 1 to GridWarehouse.RowCount - 1 do
-begin
-  // Se a linha estiver vazia, ignora e passa à seguinte
-  if (GridWarehouse.Cells[0, i] = '') or
-     (GridWarehouse.Cells[1, i] = '') then Continue;
-
-  // Lê a posição e o tipo de peça escritos pelo utilizador
-  pos  := StrToIntDef(GridWarehouse.Cells[0, i], 0);
-  part := StrToIntDef(GridWarehouse.Cells[1, i], 0);
-
-  // Verifica se a posição é válida (só 1ª coluna do armazém)
-  if (pos = 1)  or (pos = 10) or (pos = 19) or
-     (pos = 28) or (pos = 37) or (pos = 46) then
-  begin
-    // Guarda no array interno
-    WAREHOUSE_Parts[pos] := part;
-
-    // Se M_Initialize retornar negativo, conta como erro
-    if M_Initialize(pos, part) < 0 then
-      r := r + 1;
-
-    Memo1.Append('Inicializar posição ' + IntToStr(pos) +
-                 ' com peça ' + IntToStr(part));
-    Sleep(3000);
-  end
-  else
-    Memo1.Append('Posição inválida: ' + IntToStr(pos));
 end;
 
-if (r > 0) then
-  Memo1.Append('Inicialização com erros')
-else
-  Memo1.Append('Armazém inicializado com sucesso!');
-
-end;
-end;
-
- procedure TFormDispatcher.BInitiatilizeClick(Sender: TObject);
+ procedure TFormDispatcher.BIniciarPlano(Sender: TObject);
   begin
   // Converte as ordens em tarefas e arranca o dispatcher
   if Length(Production_Orders) = 0 then
@@ -312,8 +282,103 @@ end;
   Timer1.Enabled := True;
 end;
 
+ procedure TFormDispatcher.BAdicionarPecaWarehouseClick(Sender: TObject);
+ const
+   // As 6 posições válidas do armazém (1ª coluna)
+   VALID_POS : array[0..5] of integer = (1, 10, 19, 28, 37, 46);
+ var
+   part      : integer;
+   qty       : integer;
+   i, j      : integer;
+   pos       : integer;
+   found     : boolean;
+   nomePeca  : string;
+   row       : integer;
+ begin
+   // Validação: peça selecionada?
+   if CmbTipoPecaWarehouse.ItemIndex = -1 then
+   begin
+     ShowMessage('Selecione o tipo de peça!');
+     Exit;
+   end;
 
+   // Validação: quantidade válida?
+   qty := StrToIntDef(EditQuantidadeWarehouse.Text, 0);
+   if qty <= 0 then
+   begin
+     ShowMessage('Introduza uma quantidade válida!');
+     Exit;
+   end;
 
+   // Converte índice da ComboBox para código da peça (índice 0 = peça 1)
+   part     := CmbTipoPecaWarehouse.ItemIndex + 1;
+   nomePeca := CmbTipoPecaWarehouse.Items[CmbTipoPecaWarehouse.ItemIndex];
+
+   // Inicializa o array se ainda não foi criado
+   if Length(WAREHOUSE_Parts) = 0 then
+   begin
+     SetLength(WAREHOUSE_Parts, 55);
+     for i := 0 to 54 do
+       WAREHOUSE_Parts[i] := 0;
+   end;
+
+   // Tenta colocar 'qty' peças nas posições livres
+   for j := 1 to qty do
+   begin
+     // Procura a próxima posição válida que esteja livre
+     found := false;
+     for i := 0 to 5 do
+     begin
+       pos := VALID_POS[i];
+       if WAREHOUSE_Parts[pos] = 0 then  // posição livre!
+       begin
+         found := true;
+         Break;
+       end;
+     end;
+
+     if not found then
+     begin
+       ShowMessage('Não há posições livres no armazém!');
+       Exit;
+     end;
+
+     // Guarda no array interno
+     WAREHOUSE_Parts[pos] := part;
+
+     // Envia o comando ao autómato
+     if M_Initialize(pos, part) < 0 then
+       Memo1.Append('Erro ao inicializar posição ' + IntToStr(pos))
+     else
+       Memo1.Append('Posição ' + IntToStr(pos) + ' <- ' + nomePeca);
+
+     // Atualiza a grelha de estado
+     row := GridEstadoArmazem.RowCount;
+     GridEstadoArmazem.RowCount      := row + 1;
+     GridEstadoArmazem.Cells[0, row] := IntToStr(pos);
+     GridEstadoArmazem.Cells[1, row] := nomePeca;
+
+     Sleep(1500);
+   end;
+
+   // Limpa os campos
+   CmbTipoPecaWarehouse.ItemIndex   := -1;
+   EditQuantidadeWarehouse.Text     := '';
+ end;
+{
+ ## Como funciona a lógica de posições automáticas
+
+ Utilizador escolhe: Tampa Verde, quantidade 2
+               ↓
+ Código verifica VALID_POS = [1, 10, 19, 28, 37, 46]
+               ↓
+ Posição 1 está livre? → Sim → coloca Tampa Verde na posição 1
+ Posição 10 está livre? → Sim → coloca Tampa Verde na posição 10
+               ↓
+ Grelha de estado mostra:
+   Posição 1  | Tampa Verde
+   Posição 10 | Tampa Verde
+}
 procedure TFormDispatcher.BAdicionarOrdemClick(Sender: TObject);
 var
   ordem      : TTask_Type;

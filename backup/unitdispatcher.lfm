@@ -4,21 +4,11 @@ object FormDispatcher: TFormDispatcher
   Top = 95
   Width = 1225
   Caption = 'Form1'
-  ClientHeight = 0
-  ClientWidth = 0
+  ClientHeight = 863
+  ClientWidth = 1225
   DesignTimePPI = 120
   LCLVersion = '4.4.0.0'
   OnCreate = FormCreate
-  object BStart: TButton
-    Left = 24
-    Height = 31
-    Top = 272
-    Width = 198
-    Caption = 'Inicializar Inventário'
-    ParentFont = False
-    TabOrder = 0
-    OnClick = BStartClick
-  end
   object BExecute: TButton
     Left = 1032
     Height = 31
@@ -26,7 +16,7 @@ object FormDispatcher: TFormDispatcher
     Width = 174
     Caption = 'Atualizar dados'
     ParentFont = False
-    TabOrder = 1
+    TabOrder = 0
     OnClick = BExecuteClick
   end
   object Memo1: TMemo
@@ -40,7 +30,7 @@ object FormDispatcher: TFormDispatcher
       ''
     )
     ParentFont = False
-    TabOrder = 2
+    TabOrder = 1
   end
   object CmbTipoOrdem: TComboBox
     Left = 96
@@ -53,7 +43,7 @@ object FormDispatcher: TFormDispatcher
       'Produção'
       'Aprovisionamento'
     )
-    TabOrder = 3
+    TabOrder = 2
   end
   object CmbTipoPeca: TComboBox
     Left = 96
@@ -72,14 +62,14 @@ object FormDispatcher: TFormDispatcher
       'Tampa Verde'
       'Tampa Cinzenta'
     )
-    TabOrder = 4
+    TabOrder = 3
   end
   object EditQuantidade: TEdit
     Left = 160
     Height = 28
     Top = 448
     Width = 100
-    TabOrder = 5
+    TabOrder = 4
   end
   object BAdicionarOrdem: TButton
     Left = 104
@@ -87,7 +77,7 @@ object FormDispatcher: TFormDispatcher
     Top = 504
     Width = 104
     Caption = 'Adicionar'
-    TabOrder = 6
+    TabOrder = 5
     OnClick = BAdicionarOrdemClick
   end
   object BLimparPlano: TButton
@@ -96,7 +86,7 @@ object FormDispatcher: TFormDispatcher
     Top = 552
     Width = 176
     Caption = 'Anular Última Operação'
-    TabOrder = 7
+    TabOrder = 6
     OnClick = BLimparPlanoClick
   end
   object Label1: TLabel
@@ -129,7 +119,7 @@ object FormDispatcher: TFormDispatcher
     DefaultColWidth = 150
     FixedCols = 0
     RowCount = 1
-    TabOrder = 8
+    TabOrder = 7
     Cells = (
       3
       0
@@ -159,7 +149,7 @@ object FormDispatcher: TFormDispatcher
     DefaultColWidth = 150
     FixedCols = 0
     RowCount = 1
-    TabOrder = 9
+    TabOrder = 8
     Cells = (
       4
       0
@@ -186,40 +176,83 @@ object FormDispatcher: TFormDispatcher
   object Label5: TLabel
     Left = 24
     Height = 20
-    Top = 32
+    Top = 81
     Width = 152
     Caption = 'Inicialização Inventário'
   end
-  object BInitiatilizeClick: TButton
+  object BIniciarPlano: TButton
     Left = 352
     Height = 31
     Top = 608
     Width = 181
     Caption = 'Iniciar Plano Produção'
-    TabOrder = 10
-    OnClick = BInitiatilizeClick
+    TabOrder = 9
+    OnClick = BIniciarPlano
   end
-  object GridWarehouse: TStringGrid
-    Left = 24
-    Height = 192
-    Top = 64
-    Width = 368
-    ColCount = 2
-    DefaultColWidth = 180
-    DefaultRowHeight = 30
-    FixedCols = 0
-    Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goEditing, goSmoothScroll]
-    RowCount = 6
+  object CmbTipoPecaWarehouse: TComboBox
+    Left = 120
+    Height = 28
+    Top = 121
+    Width = 165
+    ItemHeight = 20
+    TabOrder = 10
+  end
+  object EditQuantidadeWarehouse: TEdit
+    Left = 120
+    Height = 28
+    Top = 161
+    Width = 165
     TabOrder = 11
-    Cells = (
-      2
-      0
-      0
-      'Posicao (1,10,19,28,37,46)'
-      1
-      0
-      'Tipo de Peca (1-9)'
-    )
+  end
+  object BAdicionarPecaWarehouse: TButton
+    Left = 24
+    Height = 45
+    Top = 209
+    Width = 176
+    Caption = 'Adicionar ao Armazem'
+    TabOrder = 12
+    OnClick = BAdicionarPecaWarehouseClick
+  end
+  object LabelTipoDePeca: TStaticText
+    Left = 24
+    Height = 26
+    Top = 121
+    Width = 96
+    Caption = 'Tipo de peça:'
+    TabOrder = 13
+  end
+  object QuantidadeDaPecaAAdicionar: TStaticText
+    Left = 24
+    Height = 20
+    Top = 169
+    Width = 94
+    Caption = 'Quantidade:'
+    TabOrder = 14
+  end
+  object GridEstadoArmazem: TStringGrid
+    Left = 371
+    Height = 160
+    Top = 113
+    Width = 246
+    TabOrder = 15
+  end
+  object EstadoArmazem: TStaticText
+    Left = 371
+    Height = 21
+    Top = 80
+    Width = 137
+    Caption = 'Estado do Armazem'
+    TabOrder = 16
+  end
+  object BStart: TButton
+    Left = 24
+    Height = 31
+    Top = 24
+    Width = 198
+    Caption = 'Ligar ao PLC'
+    ParentFont = False
+    TabOrder = 17
+    OnClick = BStartClick
   end
   object Timer1: TTimer
     Enabled = False
